@@ -1,7 +1,7 @@
 # go-ntfy-me
 An extendable ntfy.sh client in Go.
 
-## Building & installing
+## Building
 
 ```powershell
 git clone https://github.com/sanglantes/go-ntfy-me
