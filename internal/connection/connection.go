@@ -8,12 +8,12 @@ import (
 	"time"
 
 	"github.com/sanglantes/go-ntfy-me/internal/config"
-	"github.com/sanglantes/go-ntfy-me/pkg/actions"
+	"github.com/sanglantes/go-ntfy-me/pkg/action"
 	"github.com/sanglantes/go-ntfy-me/pkg/events"
 	"github.com/sanglantes/go-ntfy-me/pkg/ntfy"
 )
 
-func Start(cfg *config.Config, eb events.EventBus, r *actions.Registry) {
+func Start(cfg *config.Config, eb events.EventBus, r *action.Registry) {
 	for true {
 		err := listen(cfg, eb)
 

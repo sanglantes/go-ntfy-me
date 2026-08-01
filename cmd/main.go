@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 
+	"github.com/sanglantes/go-ntfy-me/actions"
 	"github.com/sanglantes/go-ntfy-me/internal/config"
 	"github.com/sanglantes/go-ntfy-me/internal/connection"
-	"github.com/sanglantes/go-ntfy-me/outside"
-	"github.com/sanglantes/go-ntfy-me/pkg/actions"
+	"github.com/sanglantes/go-ntfy-me/pkg/action"
 	"github.com/sanglantes/go-ntfy-me/pkg/events"
 )
 
@@ -22,8 +22,8 @@ func main() {
 	eb := events.Default()
 	log.Println("Created event bus.")
 
-	registry := actions.NewRegistry("ntfy.msg", eb)
-	outside.Install(registry, eb)
+	registry := action.NewRegistry("ntfy.msg", eb)
+	actions.Install(registry, eb)
 	log.Println("Created action registry.")
 
 	if cfg.AddToStartUp {

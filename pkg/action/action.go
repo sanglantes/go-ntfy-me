@@ -1,4 +1,4 @@
-package actions
+package action
 
 import (
 	"cmp"
@@ -15,6 +15,7 @@ type Registration struct {
 	Action     Action
 	Priority   int
 	IsBlocking bool
+	EventBus   events.EventBus
 }
 
 type Registry struct {
@@ -37,12 +38,14 @@ func NewRegistry(eventName string, eb events.EventBus) *Registry {
 }
 
 // Register registers actions to be fired when the ntfy.msg event is triggered.
-func (r *Registry) Register(in Registration) {
+func (r *Registry) Register(in Registration, eb events.EventBus) {
 	r.registryPriority[in.Priority] = append(r.registryPriority[in.Priority], in)
 	r.registryName[in.Name] = in
 
 	r.priorities = append(r.priorities, in.Priority)
 	slices.SortFunc(r.priorities, func(a, b int) int { return cmp.Compare(b, a) })
+
+	in.EventBus = eb
 }
 
 func (r *Registry) Run(name string, event events.Event) error {
