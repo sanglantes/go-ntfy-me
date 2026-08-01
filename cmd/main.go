@@ -22,7 +22,7 @@ func main() {
 	log.Println("Created event bus.")
 
 	registry := action.NewRegistry("ntfy.msg", eb)
-	actions.Install(registry, eb)
+	actions.Install(registry)
 	log.Println("Created action registry.")
 
 	if cfg.AddToStartUp {

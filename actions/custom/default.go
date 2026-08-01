@@ -18,7 +18,7 @@ var ExportDefaultAction = action.Registration{
 	IsBlocking: false,
 }
 
-func defaultAct(e events.Event) {
+func defaultAct(e events.Event, eb events.EventBus) {
 	switch msgx := e.Data.(type) {
 	case ntfy.NtfyMessage:
 		if msgx.Event == "message" {

@@ -8,14 +8,13 @@ import (
 	"github.com/sanglantes/go-ntfy-me/pkg/events"
 )
 
-type Action func(events.Event)
+type Action func(events.Event, events.EventBus)
 
 type Registration struct {
 	Name       string
 	Action     Action
 	Priority   int
 	IsBlocking bool
-	EventBus   events.EventBus
 }
 
 type Registry struct {
@@ -23,6 +22,7 @@ type Registry struct {
 	registryName     map[string]Registration
 	priorities       []int
 	eventName        string
+	eventBus         events.EventBus
 }
 
 func NewRegistry(eventName string, eb events.EventBus) *Registry {
@@ -38,14 +38,12 @@ func NewRegistry(eventName string, eb events.EventBus) *Registry {
 }
 
 // Register registers actions to be fired when the ntfy.msg event is triggered.
-func (r *Registry) Register(in Registration, eb events.EventBus) {
+func (r *Registry) Register(in Registration) {
 	r.registryPriority[in.Priority] = append(r.registryPriority[in.Priority], in)
 	r.registryName[in.Name] = in
 
 	r.priorities = append(r.priorities, in.Priority)
 	slices.SortFunc(r.priorities, func(a, b int) int { return cmp.Compare(b, a) })
-
-	in.EventBus = eb
 }
 
 func (r *Registry) Run(name string, event events.Event) error {
@@ -54,9 +52,9 @@ func (r *Registry) Run(name string, event events.Event) error {
 		return fmt.Errorf("no such registry entry: %s", name)
 	}
 	if handler.IsBlocking {
-		handler.Action(event)
+		handler.Action(event, r.eventBus)
 	} else {
-		go handler.Action(event)
+		go handler.Action(event, r.eventBus)
 	}
 
 	return nil
@@ -66,9 +64,9 @@ func (r *Registry) RunAll(event events.Event) {
 	for _, p := range r.priorities {
 		for _, v := range r.registryPriority[p] {
 			if v.IsBlocking {
-				v.Action(event)
+				v.Action(event, r.eventBus)
 			} else {
-				go v.Action(event)
+				go v.Action(event, r.eventBus)
 			}
 		}
 	}
