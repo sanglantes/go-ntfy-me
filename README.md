@@ -62,6 +62,8 @@ func printMsg(msg ntfy.NtfyMessage) {
 }
 ```
 
+At last, register the `action.Registration` struct to `actions/init.go` with `r.Register(custom.ExportDefaultAction)` in the `Install` function.
+
 Note that `ntfy.msg` may send data that is either `[]ntfy.NtfyMessage` or `ntfy.NtfyMessage`.
 
 The `ntfy.NtfyMessage` struct looks like this:
