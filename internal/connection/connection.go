@@ -3,6 +3,7 @@ package connection
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -43,20 +44,25 @@ func listen(cfg *config.Config, eb events.EventBus) error {
 	}
 	defer resp.Body.Close()
 
-	if cfg.Polling {
-		var respBody []byte
-		if _, err := resp.Body.Read(respBody); err != nil {
-			return err
-		}
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("received HTTP status %s", resp.Status)
+	}
 
-		msg := ntfy.NtfyMessage{}
-		if err := json.Unmarshal(respBody, &msg); err != nil {
-			return err
+	if cfg.Polling {
+		var msgs []ntfy.NtfyMessage
+
+		decoder := json.NewDecoder(resp.Body)
+		for decoder.More() {
+			var msg ntfy.NtfyMessage
+			if err := decoder.Decode(&msg); err != nil {
+				return err
+			}
+			msgs = append(msgs, msg)
 		}
 
 		eb.Publish(events.Event{
 			Type: "ntfy.msg",
-			Data: respBody,
+			Data: msgs,
 		})
 	} else {
 		scanner := bufio.NewScanner(resp.Body)

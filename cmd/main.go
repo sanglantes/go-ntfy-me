@@ -15,7 +15,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to read configuration: %v", err)
 	}
-
 	log.Println("Loaded configuration.")
 	log.Printf("%+v", cfg)
 
