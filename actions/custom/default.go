@@ -21,15 +21,17 @@ var ExportDefaultAction = action.Registration{
 func defaultAct(e events.Event, eb events.EventBus) {
 	switch msgx := e.Data.(type) {
 	case ntfy.NtfyMessage:
-		if msgx.Event == "message" {
-			fmt.Println(msgx.Message)
-		}
+		printMsg(msgx)
 
 	case []ntfy.NtfyMessage:
 		for _, msg := range msgx {
-			if msg.Event == "message" {
-				fmt.Println(msg.Message)
-			}
+			printMsg(msg)
 		}
+	}
+}
+
+func printMsg(msg ntfy.NtfyMessage) {
+	if msg.Event == "message" {
+		fmt.Println(msg.Message)
 	}
 }
