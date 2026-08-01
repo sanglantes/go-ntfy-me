@@ -11,7 +11,7 @@ import (
 // This action echoes a received message.
 // The event type must be of `message`. See https://docs.ntfy.sh/subscribe/api/#list-of-all-parameters
 
-var ExportDefaultActions = action.Registration{
+var ExportDefaultAction = action.Registration{
 	Name:       "default",
 	Action:     defaultAct,
 	Priority:   1,

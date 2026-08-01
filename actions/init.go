@@ -9,5 +9,5 @@ import (
 func Install(r *action.Registry, eb events.EventBus) {
 	// Extend me.
 
-	r.Register(custom.ExportDefaultActions, nil)
+	r.Register(custom.ExportDefaultAction, nil)
 }
