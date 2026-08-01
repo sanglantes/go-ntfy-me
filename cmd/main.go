@@ -7,7 +7,7 @@ import (
 	"github.com/sanglantes/go-ntfy-me/internal/config"
 	"github.com/sanglantes/go-ntfy-me/internal/connection"
 	"github.com/sanglantes/go-ntfy-me/pkg/action"
-	"github.com/sanglantes/go-ntfy-me/pkg/events"
+	"github.com/sanglantes/go-ntfy-me/pkg/event"
 )
 
 func main() {
@@ -18,7 +18,7 @@ func main() {
 	log.Println("Loaded configuration.")
 	log.Printf("%+v", cfg)
 
-	eb := events.Default()
+	eb := event.Default()
 	log.Println("Created event bus.")
 
 	registry := action.NewRegistry("ntfy.msg", eb)
@@ -32,7 +32,7 @@ func main() {
 		log.Println("Added program to start up.")
 	}
 
-	eb.Publish(events.Event{
+	eb.Publish(event.Event{
 		Type: "self.start",
 		Data: &cfg,
 	})

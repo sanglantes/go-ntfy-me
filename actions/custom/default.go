@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/sanglantes/go-ntfy-me/pkg/action"
-	"github.com/sanglantes/go-ntfy-me/pkg/events"
+	"github.com/sanglantes/go-ntfy-me/pkg/event"
 	"github.com/sanglantes/go-ntfy-me/pkg/ntfy"
 )
 
@@ -18,7 +18,7 @@ var ExportDefaultAction = action.Registration{
 	IsBlocking: false,
 }
 
-func defaultAct(e events.Event, eb events.EventBus) {
+func defaultAct(e event.Event, eb event.EventBus) {
 	switch msgx := e.Data.(type) {
 	case ntfy.NtfyMessage:
 		printMsg(msgx)

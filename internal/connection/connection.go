@@ -10,17 +10,17 @@ import (
 
 	"github.com/sanglantes/go-ntfy-me/internal/config"
 	"github.com/sanglantes/go-ntfy-me/pkg/action"
-	"github.com/sanglantes/go-ntfy-me/pkg/events"
+	"github.com/sanglantes/go-ntfy-me/pkg/event"
 	"github.com/sanglantes/go-ntfy-me/pkg/ntfy"
 )
 
-func Start(cfg *config.Config, eb events.EventBus, r *action.Registry) {
+func Start(cfg *config.Config, eb event.EventBus, r *action.Registry) {
 	for true {
 		err := listen(cfg, eb)
 
 		if err != nil {
 			log.Printf("connection error: %v. retrying in %d seconds...", err, cfg.RetryTime)
-			eb.Publish(events.Event{
+			eb.Publish(event.Event{
 				Type: "self.conn_error",
 				Data: err,
 			})
@@ -30,7 +30,7 @@ func Start(cfg *config.Config, eb events.EventBus, r *action.Registry) {
 	}
 }
 
-func listen(cfg *config.Config, eb events.EventBus) error {
+func listen(cfg *config.Config, eb event.EventBus) error {
 	req, err := http.NewRequest(http.MethodGet, cfg.Endpoint, nil)
 	if err != nil {
 		return err
@@ -60,7 +60,7 @@ func listen(cfg *config.Config, eb events.EventBus) error {
 			msgs = append(msgs, msg)
 		}
 
-		eb.Publish(events.Event{
+		eb.Publish(event.Event{
 			Type: "ntfy.msg",
 			Data: msgs,
 		})
@@ -72,7 +72,7 @@ func listen(cfg *config.Config, eb events.EventBus) error {
 				return err
 			}
 
-			eb.Publish(events.Event{
+			eb.Publish(event.Event{
 				Type: "ntfy.msg",
 				Data: msg,
 			})

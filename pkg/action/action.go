@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/sanglantes/go-ntfy-me/pkg/events"
+	"github.com/sanglantes/go-ntfy-me/pkg/event"
 )
 
-type Action func(events.Event, events.EventBus)
+type Action func(event.Event, event.EventBus)
 
 type Registration struct {
 	Name       string
@@ -22,10 +22,10 @@ type Registry struct {
 	registryName     map[string]Registration
 	priorities       []int
 	eventName        string
-	eventBus         events.EventBus
+	eventBus         event.EventBus
 }
 
-func NewRegistry(eventName string, eb events.EventBus) *Registry {
+func NewRegistry(eventName string, eb event.EventBus) *Registry {
 	r := Registry{
 		registryPriority: make(map[int][]Registration),
 		registryName:     make(map[string]Registration),
@@ -46,27 +46,27 @@ func (r *Registry) Register(in Registration) {
 	slices.SortFunc(r.priorities, func(a, b int) int { return cmp.Compare(b, a) })
 }
 
-func (r *Registry) Run(name string, event events.Event) error {
+func (r *Registry) Run(name string, e event.Event) error {
 	handler, ok := r.registryName[name]
 	if !ok {
 		return fmt.Errorf("no such registry entry: %s", name)
 	}
 	if handler.IsBlocking {
-		handler.Action(event, r.eventBus)
+		handler.Action(e, r.eventBus)
 	} else {
-		go handler.Action(event, r.eventBus)
+		go handler.Action(e, r.eventBus)
 	}
 
 	return nil
 }
 
-func (r *Registry) RunAll(event events.Event) {
+func (r *Registry) RunAll(e event.Event) {
 	for _, p := range r.priorities {
 		for _, v := range r.registryPriority[p] {
 			if v.IsBlocking {
-				v.Action(event, r.eventBus)
+				v.Action(e, r.eventBus)
 			} else {
-				go v.Action(event, r.eventBus)
+				go v.Action(e, r.eventBus)
 			}
 		}
 	}
