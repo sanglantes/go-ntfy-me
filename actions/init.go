@@ -9,4 +9,5 @@ func Install(r *action.Registry) {
 	// Extend me.
 
 	r.Register(custom.ExportDefaultAction)
+	r.Register(custom.ExportOpenGmailAction)
 }

@@ -23,7 +23,7 @@ go-ntfy-me will look for configuration options specified in the `.env` file. The
 
 ## Extending the client
 
-go-ntfy-me can be extending with compile-time plugins. Custom "actions" are added to the `actions/custom` package and then registered in `actions/init.go`.
+go-ntfy-me can be extended with compile-time plugins. Custom "actions" are added to the `actions/custom` package and then registered in `actions/init.go`.
 
 Begin by constructing a `Registration` struct for your plugin.
 

@@ -69,5 +69,6 @@ func (r *Registry) RunAll(e event.Event) {
 				go v.Action(e, r.eventBus)
 			}
 		}
+		break
 	}
 }

@@ -22,7 +22,6 @@ func defaultAct(e event.Event, eb event.EventBus) {
 	switch msgx := e.Data.(type) {
 	case ntfy.NtfyMessage:
 		printMsg(msgx)
-
 	case []ntfy.NtfyMessage:
 		for _, msg := range msgx {
 			printMsg(msg)
