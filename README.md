@@ -6,7 +6,8 @@ An extendable ntfy.sh client in Go.
 ```powershell
 git clone https://github.com/sanglantes/go-ntfy-me
 cd go-ntfy-me
-go build -ldflags="-s -w -H windowsgui" -o gnm.exe .\cmd```
+go build -ldflags="-s -w -H windowsgui" -o gnm.exe .\cmd
+```
 
 This will build go-ntfy-me as a console-less application.
 
